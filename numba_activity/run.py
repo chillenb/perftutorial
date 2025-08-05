@@ -17,5 +17,5 @@ if __name__ == "__main__":
     print(f"Total energy: {energy}")
     print(f"Average time per run: {elapsed_time / args.repeats} seconds")
 
-    score = (args.num_points ** 2) / elapsed_time
+    score = (args.num_points ** 2) / (elapsed_time / args.repeats)
     print(f"Performance score: {score:.2e} pairs/second")
