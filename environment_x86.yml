@@ -1,0 +1,13 @@
+name: perftutorial
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pyscf
+  - libblas=*=*mkl
+  - matplotlib-base
+  - jupyterlab
+  - line_profiler
+  - pip
+  - pip:
+    - pytblis

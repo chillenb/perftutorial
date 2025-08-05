@@ -1,0 +1,12 @@
+name: perftutorial
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pyscf
+  - matplotlib-base
+  - jupyterlab
+  - line_profiler
+  - pip
+  - pip:
+    - pytblis
