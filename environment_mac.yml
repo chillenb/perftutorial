@@ -4,9 +4,20 @@ channels:
 dependencies:
   - python=3.12
   - pyscf
+  - c-compiler
+  - cxx-compiler
+  - numba
+  - numexpr
+  - cython
+  - jaxlib=*=*cpu*
+  - jax
+  - ipdb
+  - libblas=*=*accelerate
   - matplotlib-base
   - jupyterlab
   - line_profiler
   - pip
+  - cmake
+  - make
   - pip:
     - pytblis
