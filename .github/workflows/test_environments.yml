@@ -1,0 +1,22 @@
+name: Test Environments
+on:
+  workflow_dispatch
+jobs:
+  test-macos:
+    runs-on: 'macos-latest'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment_mac.yml
+      - name: Run micromamba list
+        run: micromamba list
+  test-ubuntu:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment_x86.yml
+      - name: Run micromamba list
+        run: micromamba list
