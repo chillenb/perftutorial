@@ -1,4 +1,4 @@
-from kernels import total_energy
+from kernels import total_energy, ref_total_energy
 import numpy as np
 
 import argparse
@@ -11,7 +11,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     coords = np.random.random((3, args.num_points))
+    ref_energy = ref_total_energy(coords)
     energy = total_energy(coords)
+    if not np.isclose(energy, ref_energy, rtol=1e-6):
+        raise ValueError(f"Total energy mismatch: {energy} != {ref_energy}")
 
     elapsed_time = timeit.timeit("total_energy(coords)", globals=globals(), number=args.repeats)
     print(f"Total energy: {energy}")

@@ -1,6 +1,15 @@
 from numba import njit, prange
 import numpy as np
 
+from scipy.spatial import distance_matrix
+
+def ref_total_energy(coords):
+    dist_matrix = distance_matrix(coords.T, coords.T)
+    U_sum = np.sum(np.exp(-dist_matrix))
+    U_sum -= np.sum(np.diag(np.exp(-dist_matrix)))  # remove self-interaction
+    return U_sum / 2  # divide by 2 to account for double counting
+
+
 @njit(cache=True)
 def total_energy(coords):
     # sum_{i<j} U(r_i, r_j)
