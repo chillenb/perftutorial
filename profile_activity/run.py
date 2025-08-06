@@ -10,14 +10,19 @@ def get_sigma_diag_minimal():
     nocc = 30
     nvir = 150
     naux = 300
-    norbs = nocc + nvir
+
+    nmo = nocc + nvir
+
+    orbs = range(20, 60)
+    norbs = len(orbs)
+
     nw = nw_sigma = 10
     freqs = np.linspace(0.01, 0.1, nw_sigma)
     wts = np.ones((nw_sigma))
     rng = np.random.default_rng(0)
 
-    mo_energy = rng.random((norbs))
-    Lpq = rng.random((naux, norbs, norbs))
+    mo_energy = rng.random((nmo))
+    Lpq = rng.random((naux, nmo, nmo))
 
     ef = 0
 
@@ -31,8 +36,8 @@ def get_sigma_diag_minimal():
         Pi[range(naux), range(naux)] -= 1.0
         Pi_inv = np.linalg.inv(Pi)
         Pi_inv[range(naux), range(naux)] += 1.0
-        Qnm = einsum('Pnm, PQ -> Qnm', Lpq, Pi_inv)
-        Wmn = einsum('Qnm, Qmn -> mn', Qnm, Lpq)
+        Qnm = einsum('Pnm, PQ -> Qnm', Lpq[:, orbs], Pi_inv)
+        Wmn = einsum('Qnm, Qmn -> mn', Qnm, Lpq[:, :, orbs])
         g0 = wts[w] * emo / (emo**2 + freqs[w]**2)
         sigma += einsum('mn, mw -> nw', Wmn, g0) / np.pi
     return sigma
