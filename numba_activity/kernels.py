@@ -3,6 +3,7 @@ import numpy as np
 
 from scipy.spatial import distance_matrix
 
+
 def ref_total_energy(coords):
     dist_matrix = distance_matrix(coords.T, coords.T)
     U_sum = np.sum(1 / (1 + dist_matrix))
@@ -24,4 +25,4 @@ def total_energy(coords):
                 r2 = dx * dx + dy * dy + dz * dz
                 U = 1 / (1.0 + np.sqrt(r2))
                 tot_e += U
-    return tot_e/2
+    return tot_e / 2

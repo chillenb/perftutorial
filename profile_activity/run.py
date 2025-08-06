@@ -1,9 +1,11 @@
 import line_profiler
 from pyscf import lib
 import numpy as np
+
 einsum = lib.einsum
 
 from ref import get_sigma_diag_minimal_ref
+
 
 @line_profiler.profile
 def get_sigma_diag_minimal():
@@ -23,12 +25,12 @@ def get_sigma_diag_minimal():
 
     mo_energy = rng.random((nmo))
     Lpq = rng.random((naux, nmo, nmo))
-    lib.hermi_sum(Lpq, axes=(0,2,1), inplace=True)
+    lib.hermi_sum(Lpq, axes=(0, 2, 1), inplace=True)
 
     ef = 0
 
     omega = np.zeros((nw_sigma))
-    omega[1:] = freqs[:(nw_sigma-1)]
+    omega[1:] = freqs[: (nw_sigma - 1)]
     emo = omega[None] + ef - mo_energy[:, None]
     sigma = np.zeros((norbs, nw_sigma))
     for w in range(nw):
@@ -37,10 +39,10 @@ def get_sigma_diag_minimal():
         Pi[range(naux), range(naux)] -= 1.0
         Pi_inv = np.linalg.inv(Pi)
         Pi_inv[range(naux), range(naux)] += 1.0
-        Qnm = einsum('Pnm, PQ -> Qnm', Lpq[:, orbs], Pi_inv)
-        Wmn = einsum('Qnm, Qmn -> mn', Qnm, Lpq[:, :, orbs])
-        g0 = wts[w] * emo / (emo**2 + freqs[w]**2)
-        sigma += einsum('mn, mw -> nw', Wmn, g0) / np.pi
+        Qnm = einsum("Pnm, PQ -> Qnm", Lpq[:, orbs], Pi_inv)
+        Wmn = einsum("Qnm, Qmn -> mn", Qnm, Lpq[:, :, orbs])
+        g0 = wts[w] * emo / (emo**2 + freqs[w] ** 2)
+        sigma += einsum("mn, mw -> nw", Wmn, g0) / np.pi
     return sigma
 
 
@@ -54,11 +56,11 @@ def get_rho_response(omega, mo_energy, Lpq):
     eia = eia / (omega**2 + eia * eia)
     # Response from both spin-up and spin-down density
     Pia = Lpq * (eia * 4.0)
-    Pi = einsum('Pia, Qia -> PQ', Pia, Lpq)
+    Pi = einsum("Pia, Qia -> PQ", Pia, Lpq)
     return Pi
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sol = get_sigma_diag_minimal_ref()
     sol2 = get_sigma_diag_minimal()
     if not np.allclose(sol, sol2, rtol=1e-6):
