@@ -19,10 +19,10 @@ def get_sigma_diag_minimal():
 
     ef = 0
 
-    omega = np.zeros((nw_sigma), dtype=np.complex128)
-    omega[1:] = 1j*freqs[:(nw_sigma-1)]
+    omega = np.zeros((nw_sigma))
+    omega[1:] = freqs[:(nw_sigma-1)]
     emo = omega[None] + ef - mo_energy[:, None]
-    sigma = np.zeros((norbs, nw_sigma), dtype=np.complex128)
+    sigma = np.zeros((norbs, nw_sigma))
     for w in range(nw):
         # Pi_inv = 1 - (1 - Pi)^{-1} - 1 = -[1 + (Pi - 1)^{-1}]
         Pi = get_rho_response(freqs[w], mo_energy, Lpq[:, :nocc, nocc:])
