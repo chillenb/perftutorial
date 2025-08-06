@@ -1,12 +1,10 @@
-import line_profiler
+
 from pyscf import lib
 import numpy as np
 einsum = lib.einsum
 
-from ref import get_sigma_diag_minimal_ref
 
-@line_profiler.profile
-def get_sigma_diag_minimal():
+def get_sigma_diag_minimal_ref():
     nocc = 30
     nvir = 150
     naux = 300
@@ -14,6 +12,7 @@ def get_sigma_diag_minimal():
     nw = nw_sigma = 10
     freqs = np.linspace(0.01, 0.1, nw_sigma)
     wts = np.ones((nw_sigma))
+
     rng = np.random.default_rng(0)
 
     mo_energy = rng.random((norbs))
@@ -27,7 +26,7 @@ def get_sigma_diag_minimal():
     sigma = np.zeros((norbs, nw_sigma))
     for w in range(nw):
         # Pi_inv = 1 - (1 - Pi)^{-1} - 1 = -[1 + (Pi - 1)^{-1}]
-        Pi = get_rho_response(freqs[w], mo_energy, Lpq[:, :nocc, nocc:])
+        Pi = get_rho_response_ref(freqs[w], mo_energy, Lpq[:, :nocc, nocc:])
         Pi[range(naux), range(naux)] -= 1.0
         Pi_inv = np.linalg.inv(Pi)
         Pi_inv[range(naux), range(naux)] += 1.0
@@ -38,8 +37,8 @@ def get_sigma_diag_minimal():
     return sigma
 
 
-@line_profiler.profile
-def get_rho_response(omega, mo_energy, Lpq):
+
+def get_rho_response_ref(omega, mo_energy, Lpq):
     """
     Compute density response function in auxiliary basis at freq iw.
     """
@@ -50,12 +49,3 @@ def get_rho_response(omega, mo_energy, Lpq):
     Pia = Lpq * (eia * 4.0)
     Pi = einsum('Pia, Qia -> PQ', Pia, Lpq)
     return Pi
-
-
-if __name__ == '__main__':
-    sol = get_sigma_diag_minimal_ref()
-    sol2 = get_sigma_diag_minimal()
-    if not np.allclose(sol, sol2, rtol=1e-6):
-        raise ValueError(f"Results do not match: {sol} != {sol2}")
-    for _ in range(2):
-        get_sigma_diag_minimal()
