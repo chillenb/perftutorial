@@ -23,6 +23,7 @@ def get_sigma_diag_minimal():
 
     mo_energy = rng.random((nmo))
     Lpq = rng.random((naux, nmo, nmo))
+    lib.hermi_sum(Lpq, axes=(0,2,1), inplace=True)
 
     ef = 0
 
