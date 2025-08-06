@@ -7,7 +7,7 @@ einsum = lib.einsum
 def get_sigma_diag_minimal_ref():
     nocc = 30
     nvir = 150
-    naux = 300
+    naux = 500
 
     nmo = nocc + nvir
 

@@ -9,7 +9,7 @@ from ref import get_sigma_diag_minimal_ref
 def get_sigma_diag_minimal():
     nocc = 30
     nvir = 150
-    naux = 300
+    naux = 500
 
     nmo = nocc + nvir
 
